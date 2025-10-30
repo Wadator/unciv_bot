@@ -1,0 +1,8 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Bot state
+bot_state.json
