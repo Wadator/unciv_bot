@@ -195,7 +195,12 @@ def _(key: str, **kwargs) -> str:
 # ---------------------------
 async def atomic_write_json(path: str, data: dict):
     """Атомарний запис JSON у файл (через тимчасовий файл)."""
-    tmp_fd, tmp_path = tempfile.mkstemp(prefix="state_", suffix=".json")
+    # Create temp file in the same directory as the target file
+    target_dir = os.path.dirname(os.path.abspath(path))
+    if not target_dir:
+        target_dir = '.'
+
+    tmp_fd, tmp_path = tempfile.mkstemp(prefix="state_", suffix=".json", dir=target_dir)
     try:
         with os.fdopen(tmp_fd, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4, default=str)
